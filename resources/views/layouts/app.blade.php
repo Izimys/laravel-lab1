@@ -53,6 +53,7 @@
         <a href="{{ url('/rooms') }}">Номери</a>
         <a href="{{ url('/booking') }}">Бронювання</a>
         <a href="{{ url('/contact') }}">Контакти</a>
+        <a href="{{ url('/about') }}">Про застосунок</a>
     </nav>
 </header>
 <main>
