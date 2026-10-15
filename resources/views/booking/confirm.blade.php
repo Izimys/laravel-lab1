@@ -7,6 +7,9 @@
         <p>Найближчим часом ми відправимо підтвердження на вашу електронну адресу: <b>{{ $email }}</b>.</p>
 
         <div style="background: #f4f7f6; padding: 15px; margin: 20px 0; text-align: left;">
+            <p style="margin-top: 0;"><b>Обрана категорія:</b> {{ $room_type }}</p>
+            <p><b>Дата заїзду:</b> {{ $check_in }}</p>
+            <p><b>Дата виїзду:</b> {{ $check_out }}</p>
             <b>Ваші побажання:</b><br>
             {{ $message }}
         </div>
