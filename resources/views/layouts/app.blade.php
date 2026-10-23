@@ -55,6 +55,7 @@
         <a href="{{ url('/contact') }}">Контакти</a>
         <a href="{{ url('/about') }}">Про застосунок</a>
         <a href="{{ route('country.index') }}">Країни</a>
+        <a href="{{ route('stats.pages') }}">Статистика</a>
     </nav>
 </header>
 <main>
