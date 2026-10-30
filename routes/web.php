@@ -5,6 +5,13 @@ use App\Http\Controllers\SiteController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\RoomController;
+use App\Http\Middleware\TrackVisit;
+use App\Http\Controllers\StatsController;
+
+
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Route::resource(
     'rooms',
@@ -20,10 +27,6 @@ Route::get(
     '/say/{message?}',
     [SiteController::class, 'say']
 )->name('site.say');
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get(
     '/entry',
@@ -52,3 +55,13 @@ Route::post(
     '/booking',
     [BookingController::class, 'processForm']
 )->name('booking.store');
+
+Route::get(
+    '/stats',
+    [StatsController::class, 'pages']
+)->name('stats.pages');
+
+Route::get(
+    '/stats/detail',
+    [StatsController::class, 'detail']
+)->name('stats.detail');
