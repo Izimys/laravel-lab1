@@ -7,7 +7,16 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\RoomController;
 use App\Http\Middleware\TrackVisit;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\BlogController;
 
+Route::get(
+    '/blog/admin',
+    [BlogController::class, 'admin']
+)->name('blog.admin');
+Route::resource('blog', BlogController::class);
+
+
+Route::resource('blog', BlogController::class);
 
 Route::get('/', function () {
     return view('welcome');
