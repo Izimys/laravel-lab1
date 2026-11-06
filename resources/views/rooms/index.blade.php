@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Номери готелю')
+@section('title', ($locale ?? 'uk') === 'en' ? 'Hotel Rooms' : 'Номери готелю')
 
 @section('content')
     <style>
@@ -46,13 +46,33 @@
         .action-link:hover {
             text-decoration: underline;
         }
+        .lang-switcher {
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .lang-switcher a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .lang-switcher a.active {
+            color: #3498db;
+            text-decoration: underline;
+        }
     </style>
 
-    <h1>Номери готелю</h1>
+    <h1>{{ ($locale ?? 'uk') === 'en' ? 'Hotel Rooms' : 'Номери готелю' }}</h1>
+
+    <div class="lang-switcher">
+        <span>Мова / Language:</span>
+        <a href="{{ request()->fullUrlWithQuery(['lang' => 'uk']) }}" class="{{ ($locale ?? 'uk') === 'uk' ? 'active' : '' }}">UA</a> |
+        <a href="{{ request()->fullUrlWithQuery(['lang' => 'en']) }}" class="{{ ($locale ?? 'uk') === 'en' ? 'active' : '' }}">EN</a>
+    </div>
 
     <p>
-        <a href="{{ route('rooms.create') }}" class="btn btn-primary">
-            Додати новий номер
+        <a href="{{ route('rooms.create', ['lang' => $locale ?? 'uk']) }}" class="btn btn-primary">
+            {{ ($locale ?? 'uk') === 'en' ? 'Add new room' : 'Додати новий номер' }}
         </a>
     </p>
 
@@ -60,40 +80,44 @@
         <thead>
         <tr>
             <th>#</th>
-            <th>Номер кімнати</th>
-            <th>Категорія</th>
-            <th>Ціна (грн/доба)</th>
-            <th>Місткість (осіб)</th>
-            <th>Статус</th>
-            <th>Дії</th>
+            <th>{{ ($locale ?? 'uk') === 'en' ? 'Room Number' : 'Номер кімнати' }}</th>
+            <th>{{ ($locale ?? 'uk') === 'en' ? 'Category' : 'Категорія' }}</th>
+            <th>{{ ($locale ?? 'uk') === 'en' ? 'Price (UAH/day)' : 'Ціна (грн/доба)' }}</th>
+            <th>{{ ($locale ?? 'uk') === 'en' ? 'Capacity (persons)' : 'Місткість (осіб)' }}</th>
+            <th>{{ ($locale ?? 'uk') === 'en' ? 'Status' : 'Статус' }}</th>
+            <th>{{ ($locale ?? 'uk') === 'en' ? 'Actions' : 'Дії' }}</th>
         </tr>
         </thead>
         <tbody>
-        @foreach ($rooms as $room)
+        @foreach ($rooms as $index => $room)
+            @php
+                $translation = $room->translations->where('locale', $locale ?? 'uk')->first()
+                            ?? $room->translations->where('locale', 'uk')->first();
+            @endphp
             <tr>
-                <td>{{ $loop->iteration }}</td>
+                <td>{{ $rooms->firstItem() + $index }}</td>
                 <td>
-                    <a href="{{ route('rooms.show', $room) }}" class="action-link">
+                    <a href="{{ route('rooms.show', ['room' => $room, 'lang' => $locale ?? 'uk']) }}" class="action-link">
                         {{ $room->room_number }}
                     </a>
                 </td>
-                <td>{{ $room->type }}</td>
+                <td>{{ $translation?->name ?? $room->type }}</td>
                 <td>{{ $room->price }}</td>
                 <td>{{ $room->capacity }}</td>
                 <td>
                     @if($room->is_available)
-                        <span class="status-free">Вільний</span>
+                        <span class="status-free">{{ ($locale ?? 'uk') === 'en' ? 'Available' : 'Вільний' }}</span>
                     @else
-                        <span class="status-busy">Зайнятий</span>
+                        <span class="status-busy">{{ ($locale ?? 'uk') === 'en' ? 'Occupied' : 'Зайнятий' }}</span>
                     @endif
                 </td>
                 <td>
                     <div style="display: flex; gap: 10px; align-items: center;">
-                        <a href="{{ route('rooms.edit', $room) }}" class="action-link">Редагувати</a>
-                        <form action="{{ route('rooms.destroy', $room) }}" method="POST" onsubmit="return confirm('Ви впевнені, що хочете видалити цей номер?');">
+                        <a href="{{ route('rooms.edit', ['room' => $room, 'lang' => $locale ?? 'uk']) }}" class="action-link">{{ ($locale ?? 'uk') === 'en' ? 'Edit' : 'Редагувати' }}</a>
+                        <form action="{{ route('rooms.destroy', ['room' => $room, 'lang' => $locale ?? 'uk']) }}" method="POST" onsubmit="return confirm('{{ ($locale ?? 'uk') === 'en' ? 'Are you sure you want to delete this room?' : 'Ви впевнені, що хочете видалити цей номер?' }}');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-weight: bold; text-decoration: none; padding: 0;">Видалити</button>
+                            <button type="submit" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-weight: bold; text-decoration: none; padding: 0;">{{ ($locale ?? 'uk') === 'en' ? 'Delete' : 'Видалити' }}</button>
                         </form>
                     </div>
                 </td>

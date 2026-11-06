@@ -11,10 +11,13 @@ class RoomController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $rooms = Room::paginate(5);
-        return view('rooms.index', compact('rooms'));
+        $locale = $request->get('lang', 'uk');
+        $rooms = Room::with(['translations' => function($query) use ($locale) {
+            $query->where('locale', $locale);
+        }])->paginate(5);
+        return view('rooms.index', compact('rooms', 'locale'));
     }
 
     /**
