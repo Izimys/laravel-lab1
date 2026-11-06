@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Room;
 use App\Http\Requests\RoomRequest;
+use App\Models\Facility;
+use Illuminate\Support\Arr;
 
 class RoomController extends Controller
 {
@@ -25,7 +27,9 @@ class RoomController extends Controller
      */
     public function create()
     {
-        return view('rooms.create');
+        return view('rooms.create', [
+            'facilities' => \App\Models\Facility::pluck('name', 'id'),
+        ]);
     }
 
     /**
@@ -33,7 +37,11 @@ class RoomController extends Controller
      */
     public function store(RoomRequest $request)
     {
-        Room::create($request->validated());
+        $data = $request->validated();
+        $room = Room::create(
+            Arr::except($data, ['facilities'])
+        );
+        $room->facilities()->sync($data['facilities'] ?? []);
         return redirect()->route('rooms.index');
     }
 
@@ -42,6 +50,8 @@ class RoomController extends Controller
      */
     public function show(Room $room)
     {
+        $room->load('facilities');
+        $room->loadCount('facilities');
         return view('rooms.show', compact('room'));
     }
 
@@ -50,7 +60,12 @@ class RoomController extends Controller
      */
     public function edit(Room $room)
     {
-        return view('rooms.edit', compact('room'));
+        $room->load('facilities');
+        return view('rooms.edit', [
+            'room' => $room,
+            'facilities' => Facility::pluck('name', 'id'),
+            'selected' => $room->facilities->pluck('id')->all(),
+        ]);
     }
 
     /**
@@ -58,7 +73,11 @@ class RoomController extends Controller
      */
     public function update(RoomRequest $request, Room $room)
     {
-        $room->update($request->validated());
+        $data = $request->validated();
+        $room->update(
+            Arr::except($data, ['facilities'])
+        );
+        $room->facilities()->sync($data['facilities'] ?? []);
         return redirect()->route('rooms.index');
     }
 
