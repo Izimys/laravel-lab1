@@ -20,6 +20,31 @@
             @csrf
 
             <div style="margin-bottom: 15px;">
+                <label for="facilities" style="display: block; margin-bottom: 5px; font-weight: bold;">Зручності в номері</label>
+                <select id="facilities" name="facilities[]" multiple style="width: 100%; padding: 8px;">
+                    @foreach ($facilities as $id => $name)
+                        <option
+                            value="{{ $id }}"
+                            @selected(in_array($id, old('facilities', $selected ?? [])))
+                        >
+                            {{ $name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('facilities')
+                <p style="color: red; margin-top: 5px;">{{ $message }}</p>
+                @enderror
+            </div>
+            <script type="module">
+                $(function () {
+                    $('#facilities').select2({
+                        placeholder: 'Оберіть зручності',
+                        width: '100%'
+                    });
+                });
+            </script>
+
+            <div style="margin-bottom: 15px;">
                 <label style="font-weight: bold;">Номер кімнати:</label><br>
                 <input type="text" name="room_number" value="{{ old('room_number') }}" style="width: 100%; padding: 8px; box-sizing: border-box;" required>
             </div>

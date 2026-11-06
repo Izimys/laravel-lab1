@@ -23,6 +23,17 @@ class Blog extends Model
             'category_id'
         );
     }
+
+    public function filters(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(
+            Filter::class,
+            'blog_filter',
+            'blog_id',
+            'filter_id'
+        );
+    }
+
     public function author(): BelongsTo
     {
         return $this->belongsTo(

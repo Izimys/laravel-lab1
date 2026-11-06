@@ -14,6 +14,15 @@
         <div style="line-height: 1.6;">
             {{ $blog->text }}
         </div>
+        <div class="tags">
+            @forelse ($blog->filters as $filter)
+                <span class="tag">
+ {{ $filter->filter_name }}
+ </span>
+            @empty
+                <span>Міток немає.</span>
+            @endforelse
+        </div>
     </article>
 
     <div style="margin-top: 20px;">
