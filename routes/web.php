@@ -15,6 +15,17 @@ Route::get(
 )->name('blog.admin');
 Route::resource('blog', BlogController::class);
 
+Route::resource('filters', FilterController::class)
+    ->except(['show']);
+
+Route::get(
+    '/blog/{blog}/tags',
+    [BlogController::class, 'tags']
+)->name('blog.tags');
+Route::post(
+    '/blog/{blog}/tags',
+    [BlogController::class, 'tagsStore']
+)->name('blog.tags.store');
 
 Route::resource('blog', BlogController::class);
 
