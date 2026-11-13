@@ -15,6 +15,8 @@ Route::get(
 )->name('blog.admin');
 Route::resource('blog', BlogController::class);
 
+Route::get('/rooms/admin', [RoomController::class, 'admin'])->name('rooms.admin');
+
 Route::resource('filters', FilterController::class)
     ->except(['show']);
 

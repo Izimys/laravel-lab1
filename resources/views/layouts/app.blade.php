@@ -96,6 +96,7 @@
         <a href="{{ route('country.index') }}">Країни</a>
         <a href="{{ route('stats.pages') }}">Статистика</a>
         <a href="{{ url('/blog') }}">Блог</a>
+        <a href="{{ route('rooms.admin') }}">Адміністрування номерів</a>
     </nav>
 </header>
 <main>
