@@ -70,11 +70,13 @@
         <a href="{{ request()->fullUrlWithQuery(['lang' => 'en']) }}" class="{{ ($locale ?? 'uk') === 'en' ? 'active' : '' }}">EN</a>
     </div>
 
-    <p>
-        <a href="{{ route('rooms.create', ['lang' => $locale ?? 'uk']) }}" class="btn btn-primary">
-            {{ ($locale ?? 'uk') === 'en' ? 'Add new room' : 'Додати новий номер' }}
-        </a>
-    </p>
+    @auth
+        <p>
+            <a href="{{ route('rooms.create', ['lang' => $locale ?? 'uk']) }}" class="btn btn-primary">
+                {{ ($locale ?? 'uk') === 'en' ? 'Add new room' : 'Додати новий номер' }}
+            </a>
+        </p>
+    @endauth
 
     <table class="hotel-table">
         <thead>
@@ -85,7 +87,9 @@
             <th>{{ ($locale ?? 'uk') === 'en' ? 'Price (UAH/day)' : 'Ціна (грн/доба)' }}</th>
             <th>{{ ($locale ?? 'uk') === 'en' ? 'Capacity (persons)' : 'Місткість (осіб)' }}</th>
             <th>{{ ($locale ?? 'uk') === 'en' ? 'Status' : 'Статус' }}</th>
-            <th>{{ ($locale ?? 'uk') === 'en' ? 'Actions' : 'Дії' }}</th>
+            @auth
+                <th>{{ ($locale ?? 'uk') === 'en' ? 'Actions' : 'Дії' }}</th>
+            @endauth
         </tr>
         </thead>
         <tbody>
@@ -111,16 +115,18 @@
                         <span class="status-busy">{{ ($locale ?? 'uk') === 'en' ? 'Occupied' : 'Зайнятий' }}</span>
                     @endif
                 </td>
-                <td>
-                    <div style="display: flex; gap: 10px; align-items: center;">
-                        <a href="{{ route('rooms.edit', ['room' => $room, 'lang' => $locale ?? 'uk']) }}" class="action-link">{{ ($locale ?? 'uk') === 'en' ? 'Edit' : 'Редагувати' }}</a>
-                        <form action="{{ route('rooms.destroy', ['room' => $room, 'lang' => $locale ?? 'uk']) }}" method="POST" onsubmit="return confirm('{{ ($locale ?? 'uk') === 'en' ? 'Are you sure you want to delete this room?' : 'Ви впевнені, що хочете видалити цей номер?' }}');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-weight: bold; text-decoration: none; padding: 0;">{{ ($locale ?? 'uk') === 'en' ? 'Delete' : 'Видалити' }}</button>
-                        </form>
-                    </div>
-                </td>
+                @auth
+                    <td>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <a href="{{ route('rooms.edit', ['room' => $room, 'lang' => $locale ?? 'uk']) }}" class="action-link">{{ ($locale ?? 'uk') === 'en' ? 'Edit' : 'Редагувати' }}</a>
+                            <form action="{{ route('rooms.destroy', ['room' => $room, 'lang' => $locale ?? 'uk']) }}" method="POST" onsubmit="return confirm('{{ ($locale ?? 'uk') === 'en' ? 'Are you sure you want to delete this room?' : 'Ви впевнені, що хочете видалити цей номер?' }}');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-weight: bold; text-decoration: none; padding: 0;">{{ ($locale ?? 'uk') === 'en' ? 'Delete' : 'Видалити' }}</button>
+                            </form>
+                        </div>
+                    </td>
+                @endauth
             </tr>
         @endforeach
         </tbody>
