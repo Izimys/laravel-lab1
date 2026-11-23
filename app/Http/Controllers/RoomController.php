@@ -7,12 +7,10 @@ use App\Models\Room;
 use App\Http\Requests\RoomRequest;
 use App\Models\Facility;
 use Illuminate\Support\Arr;
+use App\Queries\RoomFilter;
 
 class RoomController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $locale = $request->get('lang', 'uk');
@@ -22,9 +20,6 @@ class RoomController extends Controller
         return view('rooms.index', compact('rooms', 'locale'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('rooms.create', [
@@ -32,9 +27,6 @@ class RoomController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(RoomRequest $request)
     {
         $data = $request->validated();
@@ -45,9 +37,6 @@ class RoomController extends Controller
         return redirect()->route('rooms.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Room $room)
     {
         $room->load('facilities');
@@ -55,9 +44,6 @@ class RoomController extends Controller
         return view('rooms.show', compact('room'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Room $room)
     {
         $room->load('facilities');
@@ -68,9 +54,6 @@ class RoomController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(RoomRequest $request, Room $room)
     {
         $data = $request->validated();
@@ -81,12 +64,36 @@ class RoomController extends Controller
         return redirect()->route('rooms.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Room $room)
     {
         $room->delete();
         return redirect()->route('rooms.index');
+    }
+
+    public function admin(Request $request, RoomFilter $filter)
+    {
+        $input = $request->validate([
+            'room_number' => ['nullable', 'string', 'max:50'],
+            'type' => ['nullable', 'string', 'max:100'],
+            'facility_id' => [
+                'nullable',
+                'integer',
+                'exists:facilities,id',
+            ],
+            'sort' => ['nullable', 'string', 'max:30'],
+        ]);
+
+        $rooms = $filter->apply($input)
+            ->paginate(10)
+            ->withQueryString();
+
+        $types = Room::select('type')->distinct()->pluck('type', 'type');
+
+        return view('rooms.admin', [
+            'rooms' => $rooms,
+            'types' => $types,
+            'facilities' => Facility::orderBy('name')->pluck('name', 'id'),
+            'currentSort' => $input['sort'] ?? '-created',
+        ]);
     }
 }
