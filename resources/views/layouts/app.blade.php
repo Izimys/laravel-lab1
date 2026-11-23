@@ -30,6 +30,51 @@
             text-decoration: underline;
         }
 
+        nav form {
+            display: inline;
+            margin: 0;
+        }
+
+        nav button {
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            color: #ffffff;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        nav button:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .nav-left,
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-right {
+            margin-left: auto;
+        }
+
+        .nav-user {
+            color: #e2e8f0;
+            font-size: 15px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
         /* центральний блок */
         main {
             padding: 30px 20px;
@@ -88,15 +133,38 @@
 <body>
 <header>
     <nav>
-        <a href="{{ url('/') }}">Головна</a>
-        <a href="{{ url('/rooms') }}">Номери</a>
-        <a href="{{ url('/booking') }}">Бронювання</a>
-        <a href="{{ url('/contact') }}">Контакти</a>
-        <a href="{{ url('/about') }}">Про застосунок</a>
-        <a href="{{ route('country.index') }}">Країни</a>
-        <a href="{{ route('stats.pages') }}">Статистика</a>
-        <a href="{{ url('/blog') }}">Блог</a>
-        <a href="{{ route('rooms.admin') }}">Адміністрування номерів</a>
+        <div class="nav-left">
+            <a href="{{ url('/') }}">Головна</a>
+            <a href="{{ url('/rooms') }}">Номери</a>
+            <a href="{{ url('/booking') }}">Бронювання</a>
+            <a href="{{ url('/contact') }}">Контакти</a>
+            <a href="{{ url('/about') }}">Про застосунок</a>
+            <a href="{{ route('country.index') }}">Країни</a>
+            <a href="{{ url('/blog') }}">Блог</a>
+
+            @auth
+                <a href="{{ route('stats.pages') }}">Статистика</a>
+                <a href="{{ route('rooms.admin') }}">Адміністрування номерів</a>
+                <a href="{{ route('blog.admin') }}">Керування блогом</a>
+                <a href="{{ route('users.index') }}">Користувачі</a>
+            @endauth
+        </div>
+
+        <div class="nav-right">
+            @auth
+                <span class="nav-user">{{ auth()->user()->name }}</span>
+                <a href="{{ route('profile.edit') }}">Мій профіль</a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit">Вийти</button>
+                </form>
+            @endauth
+
+            @guest
+                <a href="{{ route('login') }}">Увійти</a>
+                <a href="{{ route('register') }}">Реєстрація</a>
+            @endguest
+        </div>
     </nav>
 </header>
 <main>

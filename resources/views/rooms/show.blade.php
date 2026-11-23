@@ -52,10 +52,11 @@
         <a href="{{ route('rooms.index', ['lang' => $locale]) }}" style="background: #e2e8f0; color: #333; padding: 8px 15px; text-decoration: none; border-radius: 4px; border: 1px solid #ccc; font-weight: 500;">
             {{ $locale === 'en' ? 'Back to list' : 'Повернутися до списку' }}
         </a>
-
+        @auth
         <a href="{{ route('rooms.edit', $room) }}" style="background: #2c3e50; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-weight: 500;">
             {{ $locale === 'en' ? 'Edit Room' : 'Редагувати номер' }}
         </a>
+        @endauth
     </div>
     </p>
 @endsection

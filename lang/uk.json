@@ -1,0 +1,17 @@
+{
+    "Log in": "Увійти",
+    "Register": "Зареєструватися",
+    "Name": "Ім'я",
+    "Email": "Електронна пошта",
+    "Password": "Пароль",
+    "Confirm Password": "Підтвердіть пароль",
+    "Remember me": "Запам'ятати мене",
+    "Forgot your password?": "Забули пароль?",
+    "Already registered?": "Вже зареєстровані?",
+    "Reset Password": "Скинути пароль",
+    "Email Password Reset Link": "Надіслати посилання для скидання пароля",
+    "Profile": "Профіль",
+    "Log Out": "Вийти",
+    "Dashboard": "Панель керування",
+    "You're logged in!": "Ви увійшли в систему!"
+}
